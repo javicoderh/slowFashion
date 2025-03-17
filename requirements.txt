@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+asyncpg  # Para PostgreSQL
+pydantic  # Validación de datos
