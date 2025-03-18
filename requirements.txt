@@ -1,4 +1,7 @@
 fastapi
 uvicorn
-asyncpg  # Para PostgreSQL
-pydantic  # Validación de datos
+asyncpg  
+pydantic  
+firebase-admin
+email-validator
+bcrypt
