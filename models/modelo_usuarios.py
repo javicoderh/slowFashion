@@ -33,3 +33,7 @@ class Usuario(BaseModel):
     pedidos: List = []  # Lista de pedidos (vacío por defecto)
     token: str  # Contraseña (token)
     last_login: datetime = datetime.utcnow()  # Último login
+
+class LoginRequest(BaseModel):
+    username: str
+    token: str

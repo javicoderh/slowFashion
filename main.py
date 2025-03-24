@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi import FastAPI, HTTPException, APIRouter, Path
 from pydantic import BaseModel, EmailStr
-from models.modelo_usuarios import Usuario, Pedido, CambioContrasenaRequest
+from models.modelo_usuarios import Usuario, Pedido, CambioContrasenaRequest,LoginRequest
 from models.modelo_admins import Admin, CambioContrasenaAdminRequest
 from models.modelo_productos import Producto
-from services.usuarios import obtener_usuarios, crear_usuario, agregar_pedido, eliminar_usuario, eliminar_pedido, cambiar_contrasena
-from services.admins import obtener_admins, crear_admin, eliminar_admin, cambiar_contrasena_admin 
+from services.usuarios import obtener_usuarios, crear_usuario, agregar_pedido, eliminar_usuario, eliminar_pedido, cambiar_contrasena, login_usuario
+from services.admins import obtener_admins, crear_admin, eliminar_admin, cambiar_contrasena_admin
 from services.productos import crear_producto ,obtener_producto_por_nombre, obtener_productos, eliminar_producto, obtener_producto_por_nombre, actualizar_producto, modificar_producto
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_config import db
@@ -93,3 +93,7 @@ def modificar_producto_route(id: str, cambios: Dict[str, str]):
 @app.delete("/productos/{id}")
 def eliminar_producto_route(id: str):
     return eliminar_producto(id)
+
+@app.post("/login")
+def login_route(request: LoginRequest):
+    return login_usuario(request.username, request.token)

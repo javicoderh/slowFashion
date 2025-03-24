@@ -1,6 +1,6 @@
 import bcrypt
 from firebase_config import db
-from models.modelo_usuarios import Usuario, Pedido, CambioContrasenaRequest
+from models.modelo_usuarios import Usuario, Pedido, CambioContrasenaRequest, LoginRequest
 from datetime import datetime
 from fastapi import HTTPException
 import secrets  # 📌 Para generar el token de seguridad
@@ -125,3 +125,33 @@ def cambiar_contrasena(nombre_usuario: str, contrasena_actual: str, nueva_contra
     except Exception as e:
         # Capturar cualquier error y lanzar una excepción HTTP
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
+
+def login_usuario(username: str, token: str):
+    try:
+        usuarios_ref = db.collection("usuarios").where("username", "==", username).stream()
+        usuarios = [doc for doc in usuarios_ref]
+
+        if not usuarios:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        if len(usuarios) > 1:
+            raise HTTPException(status_code=400, detail="Usuario duplicado, contacta soporte")
+
+        usuario_data = usuarios[0].to_dict()
+
+        if not verificar_password(token, usuario_data["token"]):
+            raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+
+        # Opcional: actualizar last_login
+        usuarios[0].reference.update({"last_login": datetime.utcnow()})
+
+        # No devolvemos el hash
+        usuario_data.pop("token", None)
+
+        return {
+            "message": "Login exitoso",
+            "usuario": usuario_data
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
