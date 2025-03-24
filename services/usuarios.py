@@ -134,13 +134,15 @@ def login_usuario(username: str, token: str):
                 raise HTTPException(status_code=401, detail="Contraseña incorrecta (admin)")
 
             admins[0].reference.update({"last_login": datetime.utcnow()})
+
+            tipo = admin_data.get("tipo", "admin")
             admin_data.pop("token", None)
 
             return {
                 "message": "Login exitoso (admin)",
                 "usuario": {
                     **admin_data,
-                    "tipo_usuario": admin_data.get("tipo", "admin")  # 👈 unificamos aquí
+                    "tipo_usuario": "admin"  # 🔥 estándar como acordamos
                 }
             }
 
@@ -163,10 +165,11 @@ def login_usuario(username: str, token: str):
             "message": "Login exitoso",
             "usuario": {
                 **usuario_data,
-                "tipo_usuario": usuario_data.get("tipo_usuario", "cliente")  # 👈 estándar
+                "tipo_usuario": usuario_data.get("tipo_usuario", "cliente")
             }
         }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
