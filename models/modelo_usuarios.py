@@ -13,7 +13,7 @@ class Pedido(BaseModel):
     descripcion: Optional[str] = None
 
 class CambioContrasenaRequest(BaseModel):
-    nombre_usuario: str
+    username: str
     contrasena_actual: str
     nueva_contrasena: str
 

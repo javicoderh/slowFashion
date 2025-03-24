@@ -12,8 +12,9 @@ class Admin(BaseModel):
     fecha_registro: datetime = datetime.utcnow()
     tienda_a_cargo: str  # 📌 Tienda asignada, si es un admin de tienda
     token: str  # 📌 Token de autenticación
+    username: str
 
 class CambioContrasenaAdminRequest(BaseModel):
-    nombre_usuario: str
+    username: str
     contrasena_actual: str
     nueva_contrasena: str

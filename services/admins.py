@@ -55,33 +55,27 @@ def verificar_password(password: str, hashed_password: str) -> bool:
     """Compara la contraseña ingresada con el hash almacenado en la base de datos"""
     return bcrypt.checkpw(password.encode(), hashed_password.encode())
 
-def cambiar_contrasena_admin(nombre_usuario: str, contrasena_actual: str, nueva_contrasena: str):
+def cambiar_contrasena_admin(username: str, contrasena_actual: str, nueva_contrasena: str):
     try:
-        # Buscar admin por nombre en Firestore
-        admins_ref = db.collection("admins").where("nombre", "==", nombre_usuario).stream()
+        admins_ref = db.collection("admins").where("username", "==", username).stream()
         admins = [doc for doc in admins_ref]
 
         if not admins:
             raise HTTPException(status_code=404, detail="Admin no encontrado")
 
         if len(admins) > 1:
-            raise HTTPException(status_code=400, detail="Nombre de admin duplicado, contacta soporte")
+            raise HTTPException(status_code=400, detail="Username duplicado, contacta soporte")
 
         admin_ref = admins[0].reference
         admin_data = admins[0].to_dict()
 
-        # Verificar si la contraseña actual ingresada coincide con el hash almacenado
         if not verificar_password(contrasena_actual, admin_data["token"]):
             raise HTTPException(status_code=403, detail="Contraseña actual incorrecta")
 
-        # Hashear la nueva contraseña antes de almacenarla
         nueva_contrasena_hashed = bcrypt.hashpw(nueva_contrasena.encode(), bcrypt.gensalt()).decode()
-
-        # Actualizar la contraseña en la base de datos
         admin_ref.update({"token": nueva_contrasena_hashed})
 
         return {"message": "Contraseña de admin actualizada correctamente"}
 
     except Exception as e:
-        # Capturar cualquier error y lanzar una excepción HTTP
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
