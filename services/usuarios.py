@@ -128,30 +128,50 @@ def cambiar_contrasena(nombre_usuario: str, contrasena_actual: str, nueva_contra
 
 def login_usuario(username: str, token: str):
     try:
+        # Buscar primero en admins
+        admins_ref = db.collection("admins").where("username", "==", username).stream()
+        admins = [doc for doc in admins_ref]
+
+        if admins:
+            admin_data = admins[0].to_dict()
+
+            if not verificar_password(token, admin_data["token"]):
+                raise HTTPException(status_code=401, detail="Contraseña incorrecta (admin)")
+
+            admins[0].reference.update({"last_login": datetime.utcnow()})
+            admin_data.pop("token", None)
+
+            return {
+                "message": "Login exitoso (admin)",
+                "usuario": {
+                    **admin_data,
+                    "tipo_usuario": admin_data.get("tipo", "admin")  # 👈 unificamos aquí
+                }
+            }
+
+        # Si no es admin, buscar en usuarios
         usuarios_ref = db.collection("usuarios").where("username", "==", username).stream()
         usuarios = [doc for doc in usuarios_ref]
 
         if not usuarios:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
-        if len(usuarios) > 1:
-            raise HTTPException(status_code=400, detail="Usuario duplicado, contacta soporte")
-
         usuario_data = usuarios[0].to_dict()
 
         if not verificar_password(token, usuario_data["token"]):
             raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-        # Opcional: actualizar last_login
         usuarios[0].reference.update({"last_login": datetime.utcnow()})
-
-        # No devolvemos el hash
         usuario_data.pop("token", None)
 
         return {
             "message": "Login exitoso",
-            "usuario": usuario_data
+            "usuario": {
+                **usuario_data,
+                "tipo_usuario": usuario_data.get("tipo_usuario", "cliente")  # 👈 estándar
+            }
         }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
