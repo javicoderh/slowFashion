@@ -1,5 +1,5 @@
 from firebase_config import db
-from models.modelo_pedidos import Pedido
+from models.modelo_pedidos import Pedido_tabla_pedidos
 from fastapi import HTTPException
 from datetime import datetime, timedelta
 from typing import Optional, List
