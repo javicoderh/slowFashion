@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Pedido(BaseModel):
     id_pedido: str
-    total: float
+    total: float  # 🟢 Asegúrate de enviar esto siempre
     fecha: datetime
     estado: str  # "pendiente", "enviado", "entregado"
     direccion_entrega: str

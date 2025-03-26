@@ -11,6 +11,9 @@ def crear_producto(producto: Producto):
         nuevo_producto["creado_en"] = datetime.utcnow()
         nuevo_producto["actualizado_en"] = datetime.utcnow()
 
+        # 🔒 Forzar la moneda a CLP siempre
+        nuevo_producto["moneda"] = "CLP"
+
         # 🔥 Agregar producto a Firestore
         doc_ref = db.collection("productos").add(nuevo_producto)
         producto_id = doc_ref[1].id
@@ -21,6 +24,7 @@ def crear_producto(producto: Producto):
         return {"message": "Producto agregado correctamente", "id": producto_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # 📌 Obtener todos los productos
 def obtener_productos():
