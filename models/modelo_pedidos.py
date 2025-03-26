@@ -8,7 +8,7 @@ class ProductoEnPedido(BaseModel):
     nombre: str
     cantidad: int
 
-class Pedido(BaseModel):
+class Pedido_tabla_pedidos(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
     username: str
     nombre: str

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from typing import Optional, List
 
 # 📌 Crear pedido
-def crear_pedido(pedido: Pedido):
+def crear_pedido_tabla_pedidos(pedido: Pedido):
     try:
         nuevo_pedido = pedido.dict()
         nuevo_pedido["fecha_ingreso"] = datetime.utcnow()
@@ -21,7 +21,7 @@ def crear_pedido(pedido: Pedido):
 
 
 # 📌 Obtener todos los pedidos
-def obtener_pedidos():
+def obtener_pedidos_tabla_pedidos():
     try:
         pedidos_ref = db.collection("pedidos").stream()
         pedidos = [{"id": doc.id, **doc.to_dict()} for doc in pedidos_ref]
@@ -31,7 +31,7 @@ def obtener_pedidos():
 
 
 # 📌 Obtener un pedido por ID
-def obtener_pedido_por_id(pedido_id: str):
+def obtener_pedido_por_id_tabla_pedidos(pedido_id: str):
     try:
         pedido_ref = db.collection("pedidos").document(pedido_id).get()
         if not pedido_ref.exists:
@@ -42,7 +42,7 @@ def obtener_pedido_por_id(pedido_id: str):
 
 
 # 📌 Actualizar estado del pedido (PATCH)
-def actualizar_estado_pedido(pedido_id: str, nuevo_estado: str):
+def actualizar_estado_pedido_tabla_pedidos(pedido_id: str, nuevo_estado: str):
     try:
         pedido_ref = db.collection("pedidos").document(pedido_id)
 
@@ -63,7 +63,7 @@ def actualizar_estado_pedido(pedido_id: str, nuevo_estado: str):
 
 
 # 📌 Editar pedido completo (PUT)
-def actualizar_pedido(pedido_id: str, pedido: Pedido):
+def actualizar_pedido_tabla_pedidos(pedido_id: str, pedido: Pedido):
     try:
         pedido_ref = db.collection("pedidos").document(pedido_id)
 
