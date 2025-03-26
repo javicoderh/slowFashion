@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from typing import Optional, List
 
 # 📌 Crear pedido
-def crear_pedido_tabla_pedidos(pedido: Pedido):
+def crear_pedido_tabla_pedidos(pedido: Pedido_tabla_pedidos):
     try:
         nuevo_pedido = pedido.dict()
         nuevo_pedido["fecha_ingreso"] = datetime.utcnow()
@@ -63,7 +63,7 @@ def actualizar_estado_pedido_tabla_pedidos(pedido_id: str, nuevo_estado: str):
 
 
 # 📌 Editar pedido completo (PUT)
-def actualizar_pedido_tabla_pedidos(pedido_id: str, pedido: Pedido):
+def actualizar_pedido_tabla_pedidos(pedido_id: str, pedido: Pedido_tabla_pedidos):
     try:
         pedido_ref = db.collection("pedidos").document(pedido_id)
 
