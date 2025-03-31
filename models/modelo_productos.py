@@ -2,10 +2,6 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, Field
-from datetime import datetime
-from typing import Optional, List
-
 class Producto(BaseModel):
     id: Optional[str] = None  # Firestore generará este ID
     nombre: str
@@ -15,7 +11,8 @@ class Producto(BaseModel):
     stock: int
     categoria: str
     etiquetas: Optional[List[str]] = []
-    imagen_url: Optional[str] = None
+    imagen_portada_url: Optional[str] = None  # ✅ Imagen principal
+    imagenes_url: List[str] = []              # ✅ Galería adicional
     creado_en: datetime = Field(default_factory=datetime.utcnow)
     actualizado_en: datetime = Field(default_factory=datetime.utcnow)
     activo: bool = True

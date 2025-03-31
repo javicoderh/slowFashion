@@ -9,6 +9,8 @@ from services.admins import obtener_admins, crear_admin, eliminar_admin, cambiar
 from services.productos import crear_producto ,obtener_producto_por_nombre, obtener_productos, eliminar_producto, obtener_producto_por_nombre, actualizar_producto, modificar_producto
 from models.modelo_pedidos import Pedido_tabla_pedidos
 from services.pedidos import crear_pedido_tabla_pedidos, obtener_pedidos_tabla_pedidos, obtener_pedido_por_id_tabla_pedidos, actualizar_estado_pedido_tabla_pedidos, actualizar_pedido_tabla_pedidos, eliminar_pedido_tabla_pedidos
+from models.modelo_carrito_abandonado import CarritoAbandonado
+from services.carrito_abandonado import guardar_carrito_abandonado
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_config import db
 from typing import Optional, List
@@ -127,3 +129,7 @@ def actualizar_pedido(pedido_id: str, pedido: Pedido_tabla_pedidos):
 @app.delete("/pedidos/{pedido_id}")
 def eliminar_pedido(pedido_id: str):
     return eliminar_pedido_tabla_pedidos(pedido_id)
+
+@app.post("/carritos-abandonados")
+def post_carrito_abandonado(carrito: CarritoAbandonado):
+    return guardar_carrito_abandonado(carrito)

@@ -14,6 +14,10 @@ def crear_producto(producto: Producto):
         # 🔒 Forzar la moneda a CLP siempre
         nuevo_producto["moneda"] = "CLP"
 
+        # 🔥 Validaciones mínimas
+        if not nuevo_producto.get("imagen_portada_url"):
+            raise HTTPException(status_code=400, detail="Falta imagen de portada")
+
         # 🔥 Agregar producto a Firestore
         doc_ref = db.collection("productos").add(nuevo_producto)
         producto_id = doc_ref[1].id
@@ -24,7 +28,6 @@ def crear_producto(producto: Producto):
         return {"message": "Producto agregado correctamente", "id": producto_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # 📌 Obtener todos los productos
 def obtener_productos():
@@ -44,7 +47,7 @@ def obtener_producto_por_nombre(nombre: str):
         if not productos:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
 
-        return productos[0]  # Devuelve el primer producto encontrado
+        return productos[0]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -58,6 +61,7 @@ def actualizar_producto(id: str, producto: Producto):
 
         producto_dict = producto.dict()
         producto_dict["actualizado_en"] = datetime.utcnow()
+        producto_dict["moneda"] = "CLP"  # seguridad extra
 
         producto_ref.set(producto_dict, merge=True)
         return {"message": "Producto actualizado correctamente"}
@@ -72,8 +76,7 @@ def modificar_producto(id: str, cambios: dict):
         if not producto_ref.get().exists:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
 
-        cambios["actualizado_en"] = datetime.utcnow()  # Registrar la fecha de actualización
-
+        cambios["actualizado_en"] = datetime.utcnow()
         producto_ref.update(cambios)
         return {"message": "Producto modificado correctamente"}
     except Exception as e:
