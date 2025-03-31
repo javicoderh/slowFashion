@@ -3,16 +3,16 @@ from datetime import datetime
 from typing import Optional, List
 
 class Producto(BaseModel):
-    id: Optional[str] = None  # Firestore generará este ID
+    id: Optional[str] = None
     nombre: str
     descripcion: str
-    precio: float  # Precio en CLP
-    moneda: str = "CLP"  # Moneda actualizada (por defecto CLP)
+    precio: float
+    moneda: str = "CLP"
     stock: int
     categoria: str
     etiquetas: Optional[List[str]] = []
-    imagen_portada_url: Optional[str] = None  # ✅ Imagen principal
-    imagenes_url: List[str] = []              # ✅ Galería adicional
+    imagen_portada_url: Optional[str] = None
+    imagenes_url: List[str] = []
     creado_en: datetime = Field(default_factory=datetime.utcnow)
     actualizado_en: datetime = Field(default_factory=datetime.utcnow)
     activo: bool = True
@@ -22,3 +22,4 @@ class Producto(BaseModel):
     cantidad_resenas: int = 0
     tienda: str
     autor: Optional[str] = None
+    preferencia: int = 0  # 🆕 Prioridad manual del admin para orden
