@@ -4,7 +4,7 @@ from typing import List, Optional, Literal
 from uuid import uuid4
 
 class ProductoEnPedido(BaseModel):
-    id: str
+    id_producto: str
     nombre: str
     cantidad: int
 

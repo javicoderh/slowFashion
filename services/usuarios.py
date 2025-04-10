@@ -4,7 +4,6 @@ from models.modelo_usuarios import Usuario, Pedido, CambioContrasenaRequest, Log
 from datetime import datetime
 from fastapi import HTTPException
 import secrets  # 📌 Para generar el token de seguridad
-from fastapi import HTTPException
 import traceback  # 👈
 
 
