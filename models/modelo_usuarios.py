@@ -5,9 +5,9 @@ from datetime import datetime
 
 class Pedido(BaseModel):
     id_pedido: str
-    total: float  # 🟢 Asegúrate de enviar esto siempre
-    fecha: datetime
-    estado: str  # "pendiente", "enviado", "entregado"
+    total: float
+    fecha: datetime = Field(default_factory=datetime.utcnow)  # 👈 Esto lo soluciona
+    estado: str
     direccion_entrega: str
     fecha_entrega: Optional[datetime] = None
     descripcion: Optional[str] = None
