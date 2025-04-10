@@ -36,9 +36,13 @@ def crear_usuario(usuario: Usuario):
         # Guardar el ID dentro del propio documento
         db.collection("usuarios").document(usuario_id).update({"id": usuario_id})
 
-        return {"message": "Usuario agregado correctamente", "id": usuario_id}
+        # Devolver el usuario completo con ID actualizado
+        usuario_data = {**nuevo_usuario, "id": usuario_id}
+
+        return {"message": "Usuario agregado correctamente", "usuario": usuario_data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 def agregar_pedido(id: str, pedido: Pedido):
