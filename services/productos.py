@@ -94,3 +94,23 @@ def eliminar_producto(id: str):
         return {"message": "Producto eliminado correctamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+def aumentar_veces_comprado(id: str, cantidad: int):
+    try:
+        producto_ref = db.collection("productos").document(id)
+        producto = producto_ref.get()
+
+        if not producto.exists:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+
+        data = producto.to_dict()
+        actual = data.get("veces_comprado", 0)
+
+        producto_ref.update({
+            "veces_comprado": actual + cantidad,
+            "actualizado_en": datetime.utcnow()
+        })
+
+        return {"message": "veces_comprado actualizado correctamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

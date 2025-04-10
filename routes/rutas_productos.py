@@ -6,7 +6,8 @@ from services.productos import (
     obtener_producto_por_nombre,
     actualizar_producto,
     modificar_producto,
-    eliminar_producto
+    eliminar_producto,
+    aumentar_veces_comprado
 )
 from typing import Dict
 
@@ -35,3 +36,7 @@ def modificar_producto_route(id: str, cambios: Dict[str, str]):
 @router.delete("/{id}")
 def eliminar_producto_route(id: str):
     return eliminar_producto(id)
+
+@router.patch("/{id}/veces_comprado")
+def patch_veces_comprado(id: str, cantidad: int):
+    return aumentar_veces_comprado(id, cantidad)
