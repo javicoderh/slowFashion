@@ -6,7 +6,8 @@ from services.usuarios import (
     agregar_pedido,
     eliminar_usuario,
     eliminar_pedido,
-    cambiar_contrasena
+    cambiar_contrasena,
+    actualizar_catalogo_usuario
 )
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
