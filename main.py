@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_config import db
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 # 🚀 Importar los routers
 from routes.rutas_usuarios import router as usuarios_router
@@ -13,6 +15,19 @@ from routes.ruta_login import router as login_router
 from routes.rutas_cupon import router as cupones_router
 
 app = FastAPI()
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    print(f"🔥 Error de validación en {request.url}")
+    print("🧠 Detalle del error:", exc.errors())
+    print("📦 Body recibido:", exc.body)
+    return JSONResponse(
+        status_code=422,
+        content={
+            "detail": exc.errors(),
+            "body": exc.body
+        },
+    )
 
 app.add_middleware(
     CORSMiddleware,
