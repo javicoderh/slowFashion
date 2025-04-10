@@ -34,3 +34,8 @@ def delete_pedido(id_usuario: str, id_pedido: str):
 @router.patch("/cambiar-contrasena")
 def patch_cambiar_contrasena(request: CambioContrasenaRequest):
     return cambiar_contrasena(request.nombre_usuario, request.contrasena_actual, request.nueva_contrasena)
+
+@router.patch("/{id}/actualizar_catalogo")
+def patch_catalogo(id: str, desea_catalogo: bool):
+    return actualizar_catalogo_usuario(id, desea_catalogo)
+

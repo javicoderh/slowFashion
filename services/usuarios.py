@@ -183,3 +183,17 @@ def login_usuario(username: str, token: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def actualizar_catalogo_usuario(id: str, desea_catalogo: bool):
+    try:
+        usuario_ref = db.collection("usuarios").document(id)
+        if not usuario_ref.get().exists:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        usuario_ref.update({
+            "desea_catalogo": desea_catalogo,
+            "last_login": datetime.utcnow()
+        })
+
+        return {"message": "Preferencia de catálogo actualizada"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
