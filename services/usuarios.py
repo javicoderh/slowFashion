@@ -4,6 +4,8 @@ from models.modelo_usuarios import Usuario, Pedido, CambioContrasenaRequest, Log
 from datetime import datetime
 from fastapi import HTTPException
 import secrets  # 📌 Para generar el token de seguridad
+from fastapi import HTTPException
+import traceback  # 👈
 
 
 def hash_password(password: str) -> str:
@@ -39,6 +41,7 @@ def crear_usuario(usuario: Usuario):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 def agregar_pedido(id: str, pedido: Pedido):
     try:
         usuario_ref = db.collection("usuarios").document(id)
@@ -47,25 +50,18 @@ def agregar_pedido(id: str, pedido: Pedido):
         if usuario.exists:
             usuario_data = usuario.to_dict()
             pedidos_actuales = usuario_data.get("pedidos", [])
-
-            pedido_dict = pedido.dict()
-
-            # Convertir fechas a string
-            pedido_dict["fecha"] = pedido.fecha.isoformat()
-            if pedido.fecha_entrega:
-                pedido_dict["fecha_entrega"] = pedido.fecha_entrega.isoformat()
-            else:
-                pedido_dict["fecha_entrega"] = None
-
-            pedidos_actuales.append(pedido_dict)
+            pedidos_actuales.append(pedido.dict())
 
             usuario_ref.update({"pedidos": pedidos_actuales})
-            return {"message": "Pedido agregado correctamente", "pedido": pedido_dict}
+            return {"message": "Pedido agregado correctamente", "pedido": pedido.dict()}
         else:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print("🔥 ERROR AGREGANDO PEDIDO 🔥")
+        print("Payload recibido:", pedido.dict())
+        traceback.print_exc()  # 👈 Muestra traza completa en logs
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
 
 def eliminar_usuario(id: str):
