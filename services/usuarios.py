@@ -47,15 +47,26 @@ def agregar_pedido(id: str, pedido: Pedido):
         if usuario.exists:
             usuario_data = usuario.to_dict()
             pedidos_actuales = usuario_data.get("pedidos", [])
-            pedidos_actuales.append(pedido.dict())
+
+            pedido_dict = pedido.dict()
+
+            # Convertir fechas a string
+            pedido_dict["fecha"] = pedido.fecha.isoformat()
+            if pedido.fecha_entrega:
+                pedido_dict["fecha_entrega"] = pedido.fecha_entrega.isoformat()
+            else:
+                pedido_dict["fecha_entrega"] = None
+
+            pedidos_actuales.append(pedido_dict)
 
             usuario_ref.update({"pedidos": pedidos_actuales})
-            return {"message": "Pedido agregado correctamente", "pedido": pedido.dict()}
+            return {"message": "Pedido agregado correctamente", "pedido": pedido_dict}
         else:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 def eliminar_usuario(id: str):
     try:
