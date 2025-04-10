@@ -7,6 +7,7 @@ class Producto(BaseModel):
     nombre: str
     descripcion: str
     precio: float
+    descuento: Optional[float] = None  # 🆕 Descuento aplicado (ej: 0.2 para 20%)
     moneda: str = "CLP"
     stock: int
     categoria: str
@@ -22,4 +23,4 @@ class Producto(BaseModel):
     cantidad_resenas: int = 0
     tienda: str
     autor: Optional[str] = None
-    preferencia: int = 0  # 🆕 Prioridad manual del admin para orden
+    preferencia: int = 0  # Prioridad manual del admin para orden
