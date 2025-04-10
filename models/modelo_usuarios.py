@@ -20,7 +20,7 @@ class CambioContrasenaRequest(BaseModel):
 class Usuario(BaseModel):
     id: Optional[str] = None  # ID del usuario en Firestore (opcional)
     nombre: str  # Nombre personal
-    username: str  # Nombre de usuario (sin validación en el backend)
+    username: str  # Nombre de usuario
     email: EmailStr  # Email
     telefono: str  # Teléfono
     edad: Optional[int] = None  # Edad
@@ -33,6 +33,9 @@ class Usuario(BaseModel):
     pedidos: List = []  # Lista de pedidos (vacío por defecto)
     token: str  # Contraseña (token)
     last_login: datetime = datetime.utcnow()  # Último login
+    # 🆕 Nueva propiedad para recibir boletín/catálogos mensuales
+    desea_catalogo: bool = False
+
 
 class LoginRequest(BaseModel):
     username: str
