@@ -6,8 +6,14 @@ db = firestore.client()
 collection = db.collection('articulos')
 
 def crear_articulo(data: Articulo):
+    articulo_dict = data.dict()
+    
+    # 🔁 convertir fecha a string ISO si existe
+    if articulo_dict.get("fecha_publicacion"):
+        articulo_dict["fecha_publicacion"] = articulo_dict["fecha_publicacion"].isoformat()
+
     doc_ref = collection.document(data.id)
-    doc_ref.set(data.dict())
+    doc_ref.set(articulo_dict)
     return {"mensaje": "Artículo creado exitosamente."}
 
 def obtener_articulos():
