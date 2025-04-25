@@ -13,6 +13,7 @@ from routes.rutas_carrito_abandonado import router as carritos_abandonados_route
 from routes.rutas_facturas import router as facturas_router
 from routes.ruta_login import router as login_router
 from routes.rutas_cupon import router as cupones_router
+from routes.ruta_articulos import router as articulos_router
 
 app = FastAPI()
 
@@ -46,3 +47,4 @@ app.include_router(carritos_abandonados_router)
 app.include_router(facturas_router)
 app.include_router(login_router)
 app.include_router(cupones_router)
+app.include_router(articulos_router)
